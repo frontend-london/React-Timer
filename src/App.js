@@ -2,7 +2,9 @@ import React from 'react';
 import Timer from './components/Timer';
 
 const App = () => (
-  <Timer />
+  <div className="container">
+    <Timer />
+  </div>
 )
 
 export default App;

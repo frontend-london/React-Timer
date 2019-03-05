@@ -1,0 +1,29 @@
+.timer {
+  margin: 20px 0;
+
+  h1 {
+    text-align: center;
+    font-size: 65px;
+    font-weight: normal;
+
+    span {
+      font-size: 40px;
+    }
+  }
+
+  h2 {
+    text-align: center;
+    font-weight: normal;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+  }
+
+  .buttons {
+    text-align: center;
+    margin: 25px 0 0;
+
+    button {
+      margin: 0 5px;
+    }
+  }
+}
