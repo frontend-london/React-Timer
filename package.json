@@ -4,6 +4,7 @@
   "description": "Timer written in React 16.8 using Hooks",
   "main": "index.js",
   "dependencies": {
+    "bootstrap": "^4.3.1",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-scripts": "^2.1.5"
