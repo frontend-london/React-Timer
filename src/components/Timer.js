@@ -1,10 +1,13 @@
 import React from 'react';
+import DisplayTime from './DisplayTime';
+import EditTime from './EditTime';
 import './../styles/timer.scss';
 
 const Timer = () => (
   <div className="timer">
     <h2>Timer</h2>
-    <h1>5<span>m</span> 00<span>s</span></h1>
+    {/* <DisplayTime /> */}
+    <EditTime />
 
     <div className="buttons">
       <button type="button" className="btn btn-primary">Start</button>
