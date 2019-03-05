@@ -1,9 +1,8 @@
 import React from 'react';
+import Timer from './components/Timer';
 
 const App = () => (
-  <div className="App">
-    Here will be Timer App content
-  </div>
+  <Timer />
 )
 
 export default App;
