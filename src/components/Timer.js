@@ -11,9 +11,10 @@ const Timer = () => {
   const [seconds, setSeconds] = useState(0);
   const [secondsInitially, setSecondsInitially] = useState(300);
   const [intervalHandle, setIntervalHandle] = useState();
-  const stopEditing = () => setEditing(false);
 
   let secondsRemaining;
+
+  const stopEditing = () => setEditing(false);
 
   const updateTime = () => {
     let hours = Math.floor(secondsRemaining / 3600),
