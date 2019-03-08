@@ -31,7 +31,7 @@
   "bugs": {
     "url": "https://github.com/frontend-london/react-timer/issues"
   },
-  "homepage": "https://github.com/frontend-london/react-timer#readme",
+  "homepage": "http://timer.frontend.london/",
   "eslintConfig": {
     "extends": "react-app"
   },
