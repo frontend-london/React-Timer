@@ -14,7 +14,14 @@ const Timer = () => {
 
   let secondsRemaining;
 
-  const stopEditing = () => setEditing(false);
+  const stopCounting = () => {
+    setCounting(false);
+    clearInterval(intervalHandle);
+  }
+
+  const stopEditing = () => {
+    setEditing(false);
+  }
 
   const updateTime = () => {
     let hours = Math.floor(secondsRemaining / 3600),
@@ -35,30 +42,46 @@ const Timer = () => {
     secondsRemaining--;
   }
 
-  const onStartClick = () => {
+  const onCardClick = () => {
+    stopEditing();
+  }
+
+  const onStartClick = (e) => {
+    e.stopPropagation();
     setCounting(true);
-    setEditing(false);
+    stopEditing();
     setIntervalHandle(setInterval(cycle, 1000));
     let startingTime = seconds + (minutes * 60) + (hours * 3600);
     setSecondsInitially(startingTime);
     secondsRemaining = startingTime - 1;
   }
 
-  const onStopClick = () => {
-    setCounting(false);
-    clearInterval(intervalHandle);
+  const onStopClick = (e) => {
+    e.stopPropagation();
+    stopCounting();
   }
 
-  const onResetClick = () => {
-    onStopClick();
-    secondsRemaining = secondsInitially;
-    updateTime();
+  const onResetClick = (e) => {
+    e.stopPropagation();
+    if (editing) {
+      stopEditing();
+    } else {
+      stopCounting();
+      secondsRemaining = secondsInitially;
+      updateTime();
+    }
   }
+
+  const startEditing = (e) => {
+    e.stopPropagation();
+    stopCounting();
+    setEditing(true);
+  };
 
   return (
     <div className="timer">
-      <div className="card">
-        <div className="card-body" onClick={stopEditing}>
+      <div className="card" onClick={onCardClick}>
+        <div className="card-body">
           <h2>Timer</h2>
           {editing ? (
             <EditTime
@@ -77,7 +100,7 @@ const Timer = () => {
                 setMinutes={setMinutes}
                 seconds={seconds}
                 setSeconds={setSeconds}
-                setEditing={setEditing}
+                startEditing={startEditing}
               />
             )}
         </div>

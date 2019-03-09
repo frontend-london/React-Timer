@@ -1,13 +1,8 @@
 import React from 'react';
 
 const DisplayTime = (props) => {
-  const startEditing = (e) => {
-    e.stopPropagation();
-    props.setEditing(true);
-  };
-
   return (
-    <h1 className="display-time" onClick={startEditing}>
+    <h1 className="display-time" onClick={props.startEditing}>
       {(props.hours > 0) &&
         <>{props.hours}<span>h</span></>
       }
