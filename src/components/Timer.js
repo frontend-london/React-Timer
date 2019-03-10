@@ -1,29 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import DisplayTime from './DisplayTime';
 import EditTime from './EditTime';
+import useAudio from './../hooks/useAudio';
 import './../styles/timer.scss';
+
+let intervalHandle,
+  secondsRemaining;
 
 const Timer = () => {
   const [counting, setCounting] = useState(false);
   const [editing, setEditing] = useState(false);
   const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(5);
-  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(3);
   const [secondsInitially, setSecondsInitially] = useState(300);
-  const [intervalHandle, setIntervalHandle] = useState();
+  const [alarm, setAlarm] = useAudio("audio/alarm.mp3");
 
-  let secondsRemaining;
-
-  const stopCounting = () => {
+  const handleStopCounting = () => {
     setCounting(false);
     clearInterval(intervalHandle);
   }
 
-  const stopEditing = () => {
+  const handleStopEditing = () => {
     setEditing(false);
   }
 
-  const updateTime = () => {
+  const handleUpdateTime = () => {
     let hours = Math.floor(secondsRemaining / 3600),
       minutes = Math.floor(secondsRemaining / 60) - (hours * 60),
       seconds = secondsRemaining - (minutes * 60) - (hours * 3600);
@@ -33,24 +35,34 @@ const Timer = () => {
     setSeconds(seconds);
   }
 
-  const cycle = () => {
-    updateTime();
+  const handleStartAlarm = () => {
+    handleStopCounting();
+    setAlarm(true);
+  }
 
-    if (minutes === 0 && seconds === 0) {
-      clearInterval(intervalHandle);
+  const handleStopAlarm = () => {
+    setAlarm(false);
+  }
+
+  const handleIntervalCycle = () => {
+    handleUpdateTime();
+
+    if (secondsRemaining === 0) {
+      handleStartAlarm();
     }
     secondsRemaining--;
   }
 
   const onCardClick = () => {
-    stopEditing();
+    handleStopEditing();
+    handleStopAlarm();
   }
 
   const onStartClick = (e) => {
     e.stopPropagation();
     setCounting(true);
-    stopEditing();
-    setIntervalHandle(setInterval(cycle, 1000));
+    handleStopEditing();
+    intervalHandle = setInterval(handleIntervalCycle, 1000);
     let startingTime = seconds + (minutes * 60) + (hours * 3600);
     setSecondsInitially(startingTime);
     secondsRemaining = startingTime - 1;
@@ -58,24 +70,32 @@ const Timer = () => {
 
   const onStopClick = (e) => {
     e.stopPropagation();
-    stopCounting();
+    handleStopCounting();
+  }
+
+  const onOkClick = (e) => {
+    e.stopPropagation();
+    setAlarm(false);
+    // debugger;
   }
 
   const onResetClick = (e) => {
     e.stopPropagation();
     if (editing) {
-      stopEditing();
+      handleStopEditing();
     } else {
-      stopCounting();
+      handleStopCounting();
       secondsRemaining = secondsInitially;
-      updateTime();
+      handleUpdateTime();
     }
   }
 
-  const startEditing = (e) => {
-    e.stopPropagation();
-    stopCounting();
-    setEditing(true);
+  const onDisplayTimeClick = (e) => {
+    if (!alarm) {
+      e.stopPropagation();
+      handleStopCounting();
+      setEditing(true);
+    }
   };
 
   return (
@@ -95,22 +115,21 @@ const Timer = () => {
           ) : (
               <DisplayTime
                 hours={hours}
-                setHours={setHours}
                 minutes={minutes}
-                setMinutes={setMinutes}
                 seconds={seconds}
-                setSeconds={setSeconds}
-                startEditing={startEditing}
+                onDisplayTimeClick={onDisplayTimeClick}
               />
             )}
         </div>
         <hr />
         <div className="buttons">
-          {counting ? (
+          {alarm ? (
+            <button type="button" className="btn btn-primary" onClick={onOkClick}>OK</button>
+          ) : counting ? (
             <button type="button" className="btn btn-primary" onClick={onStopClick}>Stop</button>
           ) : (
-              <button type="button" className="btn btn-primary" onClick={onStartClick}>Start</button>
-            )}
+                <button type="button" className="btn btn-primary" onClick={onStartClick}>Start</button>
+              )}
           <button type="button" className="btn btn-secondary" onClick={onResetClick}>Reset</button>
         </div>
       </div>

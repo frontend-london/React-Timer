@@ -1,13 +1,18 @@
 import React from 'react';
 
-const DisplayTime = (props) => {
+const DisplayTime = ({
+  hours,
+  minutes,
+  seconds,
+  onDisplayTimeClick
+}) => {
   return (
-    <h1 className="display-time" onClick={props.startEditing}>
-      {(props.hours > 0) &&
-        <>{props.hours}<span>h</span></>
+    <h1 className="display-time" onClick={onDisplayTimeClick}>
+      {(hours > 0) &&
+        <>{hours}<span>h</span></>
       }
-      {props.minutes}<span>m</span>
-      {props.seconds.toString().padStart(2, '0')}<span>s</span>
+      {minutes}<span>m</span>
+      {seconds.toString().padStart(2, '0')}<span>s</span>
     </h1>
   )
 }
