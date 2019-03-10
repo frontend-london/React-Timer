@@ -12,7 +12,7 @@ const Timer = () => {
   const [editing, setEditing] = useState(false);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(3);
+  const [seconds, setSeconds] = useState(0);
   const [secondsInitially, setSecondsInitially] = useState(300);
   const [alarm, setAlarm] = useAudio("audio/alarm.mp3");
 
@@ -128,7 +128,7 @@ const Timer = () => {
           ) : counting ? (
             <button type="button" className="btn btn-primary" onClick={onStopClick}>Stop</button>
           ) : (
-                <button type="button" className="btn btn-primary" onClick={onStartClick}>Start</button>
+                <button type="button" className={'btn ' + ((hours + minutes + seconds) > 0 ? 'btn-primary' : 'btn-light disabled')} onClick={onStartClick} >Start</button>
               )}
           <button type="button" className="btn btn-secondary" onClick={onResetClick}>Reset</button>
         </div>
