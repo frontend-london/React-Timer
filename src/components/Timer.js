@@ -4,17 +4,23 @@ import EditTime from './EditTime';
 import useAudio from './../hooks/useAudio';
 import './../styles/timer.scss';
 
+const initialSeconds = 20;
+
 let intervalHandle,
-  secondsRemaining;
+  secondsRemaining = initialSeconds;
 
 const Timer = () => {
   const [counting, setCounting] = useState(false);
   const [editing, setEditing] = useState(false);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(20);
-  const [secondsInitially, setSecondsInitially] = useState(300);
+  const [seconds, setSeconds] = useState(initialSeconds);
+  const [secondsInitially, setSecondsInitially] = useState(initialSeconds);
   const [alarm, setAlarm] = useAudio("audio/alarm.mp3");
+
+  const handleSetRemainingTime = (time) => {
+    secondsRemaining = time;
+  }
 
   const handleStopCounting = () => {
     setCounting(false);
@@ -23,6 +29,9 @@ const Timer = () => {
 
   const handleStopEditing = () => {
     setEditing(false);
+    let startingTime = seconds + (minutes * 60) + (hours * 3600);
+    setSecondsInitially(startingTime);
+    handleSetRemainingTime(startingTime);
   }
 
   const handleUpdateTime = () => {
@@ -45,12 +54,12 @@ const Timer = () => {
   }
 
   const handleIntervalCycle = () => {
+    secondsRemaining--;
     handleUpdateTime();
 
     if (secondsRemaining === 0) {
       handleStartAlarm();
     }
-    secondsRemaining--;
   }
 
   const onCardClick = () => {
@@ -61,11 +70,10 @@ const Timer = () => {
   const onStartClick = (e) => {
     e.stopPropagation();
     setCounting(true);
-    handleStopEditing();
+    if (editing) {
+      handleStopEditing();
+    }
     intervalHandle = setInterval(handleIntervalCycle, 1000);
-    let startingTime = seconds + (minutes * 60) + (hours * 3600);
-    setSecondsInitially(startingTime);
-    secondsRemaining = startingTime - 1;
   }
 
   const onStopClick = (e) => {
@@ -80,13 +88,9 @@ const Timer = () => {
 
   const onResetClick = (e) => {
     e.stopPropagation();
-    if (editing) {
-      handleStopEditing();
-    } else {
-      handleStopCounting();
-      secondsRemaining = secondsInitially;
-      handleUpdateTime();
-    }
+    handleStopCounting();
+    handleSetRemainingTime(secondsInitially);
+    handleUpdateTime();
   }
 
   const onDisplayTimeClick = (e) => {
