@@ -4,7 +4,7 @@ import EditTime from './EditTime';
 import useAudio from './../hooks/useAudio';
 import './../styles/timer.scss';
 
-const initialSeconds = 20;
+const initialSeconds = 4;
 
 let intervalHandle,
   secondsRemaining = initialSeconds;
@@ -126,7 +126,7 @@ const Timer = () => {
         </div>
 
         <div className="progress">
-          <div className="progress-bar" style={{ width: (100 - (100 * secondsRemaining / secondsInitially)) + '%' }}></div>
+          <div className={'progress-bar' + (alarm ? ' finished' : '')} style={{ animationPlayState: counting ? 'running' : 'paused', animationDuration: secondsInitially + 's' }}></div>
         </div>
 
         <div className="buttons">
