@@ -12,7 +12,7 @@ const Timer = () => {
   const [editing, setEditing] = useState(false);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
+  const [seconds, setSeconds] = useState(20);
   const [secondsInitially, setSecondsInitially] = useState(300);
   const [alarm, setAlarm] = useAudio("audio/alarm.mp3");
 
@@ -76,7 +76,6 @@ const Timer = () => {
   const onOkClick = (e) => {
     e.stopPropagation();
     setAlarm(false);
-    // debugger;
   }
 
   const onResetClick = (e) => {
@@ -121,7 +120,11 @@ const Timer = () => {
               />
             )}
         </div>
-        <hr />
+
+        <div className="progress">
+          <div className="progress-bar" style={{ width: (100 - (100 * secondsRemaining / secondsInitially)) + '%' }}></div>
+        </div>
+
         <div className="buttons">
           {alarm ? (
             <button type="button" className="btn btn-primary" onClick={onOkClick}>OK</button>
@@ -133,7 +136,7 @@ const Timer = () => {
           <button type="button" className="btn btn-secondary" onClick={onResetClick}>Reset</button>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
